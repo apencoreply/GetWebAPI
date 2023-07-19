@@ -102,7 +102,7 @@ stages:
           - task: AzureFunctionApp@1
             displayName: 'Azure functions app deploy'
             inputs:
-              azureSubscription: $(azureSubscription)
+              azureSubscription: '$(azureSubscription)'
               appType: functionApp
               appName: $(functionAppName)
           
