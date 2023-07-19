@@ -105,6 +105,6 @@ stages:
               azureSubscription: '$(azureSubscription)'
               appType: 'functionApp'
               appName: '$(functionAppName)'
-              package: '$(System.DefaultWorkingDirectory)/*.zip'
+              package: '$(System.DefaultWorkingDirectory)/**/*.zip'
               deploymentMethod: 'auto'
           
