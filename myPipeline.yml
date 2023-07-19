@@ -103,6 +103,8 @@ stages:
             displayName: 'Azure functions app deploy'
             inputs:
               azureSubscription: '$(azureSubscription)'
-              appType: functionApp
-              appName: $(functionAppName)
+              appType: 'functionApp'
+              appName: '$(functionAppName)'
+              package: '$(System.DefaultWorkingDirectory)/*.zip'
+              deploymentMethod: 'auto'
           
