@@ -99,9 +99,19 @@ stages:
         deploy:
 
           steps:
+
+          - task: AzureFunctionApp@2
+            inputs:
+              azureSubscription: 'SCPenco'
+              appType: 'functionApp'
+              appName: 'GetWebAPI'
+              package: '$(System.DefaultWorkingDirectory)/WebGetAPI/**/*.zip'
+              deploymentMethod: 'auto'
+
           - task: AzureFunctionApp@1
             displayName: 'Azure functions app deploy'
             inputs:
               azureSubscription: '$(azureSubscription)'
               appType: functionApp
               appName: $(functionAppName)
+          
