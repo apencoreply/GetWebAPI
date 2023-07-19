@@ -11,7 +11,7 @@ variables:
   azureSubscription: 'SCPenco'
 
   # Function app name
-  functionAppName: 'WebGetAPI'
+  functionAppName: 'GetWebAPI'
 
   # Agent VM image name
   vmImageName: 'windows-2019'
