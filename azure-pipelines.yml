@@ -4,11 +4,11 @@
 # https://docs.microsoft.com/en-us/azure/devops/pipelines/languages/dotnet-core
 
 trigger:
-- main
+- none
 
 variables:
   # Azure Resource Manager connection created during pipeline creation
-  azureSubscription: '1b9a1107-75f0-4bbe-970c-639c0587960a'
+  azureSubscription: 'SCPenco'
 
   # Function app name
   functionAppName: 'GetWebAPI'
@@ -17,7 +17,7 @@ variables:
   vmImageName: 'windows-2019'
 
   # Working Directory
-  workingDirectory: '$(System.DefaultWorkingDirectory)/'
+  workingDirectory: '$(System.DefaultWorkingDirectory)/GetWebAPI'
 
 stages:
 - stage: Build
@@ -50,6 +50,12 @@ stages:
     - publish: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
       artifact: drop
 
+- stage: Deploy
+  displayName: Deploy stage
+  dependsOn: Build
+  condition: succeeded()
+
+  jobs:
   - deployment: Deploy
     displayName: Deploy
     environment: 'development'
