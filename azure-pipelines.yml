@@ -19,6 +19,13 @@ variables:
   # Working Directory
   workingDirectory: '$(System.DefaultWorkingDirectory)/GetWebAPI'
 
+resources:
+  repositories:
+    - repository: templates
+      type: github
+      name: apencoreply/DevOpsEmpowerTool
+      endpoint: devopsempowertool
+
 stages:
 - stage: Build
   displayName: Build stage
@@ -74,3 +81,16 @@ stages:
               appType: functionApp
               appName: $(functionAppName)
               package: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
+
+- stage: JMeterTest
+  displayName: JMeter Test stage
+  # dependsOn: BuildAndDeploy
+  # condition: eq('${{ parameters.JMeter }}', 'true')
+  # condition: and(succeeded(), eq('${{ parameters.JMeter }}', 'true'))
+
+  jobs:
+  - template: JMeter.yml@templates
+    parameters:
+      threads: '25'
+      rampup: '1'
+      loops: '2'
