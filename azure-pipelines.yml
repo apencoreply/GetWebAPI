@@ -19,6 +19,25 @@ variables:
   # Working Directory
   workingDirectory: '$(System.DefaultWorkingDirectory)/GetWebAPI'
 
+parameters:
+  - name: Build 
+    displayName: Build Azure function
+    type: boolean
+    default: false
+  - name: Deploy
+    displayName: Deploy Azure function
+    type: boolean
+    default: false
+  - name: JMeter
+    displayName: Run JMeter test
+    type: boolean
+    default: true
+  - name: ChatGPT
+    displayName: Run ChatGPT analysis
+    type: boolean
+    default: true
+
+
 resources:
   repositories:
     - repository: templates
@@ -28,6 +47,7 @@ resources:
 
 stages:
 - stage: Build
+  condition: eq('${{ parameters.Build }}', 'true')
   displayName: Build stage
 
   jobs:
@@ -60,7 +80,9 @@ stages:
 - stage: Deploy
   displayName: Deploy stage
   dependsOn: Build
-  condition: succeeded()
+  condition: and(succeeded(), eq('${{ parameters.Deploy }}', 'true'))
+  # condition: succeeded()
+
 
   jobs:
   - deployment: Deploy
@@ -85,7 +107,7 @@ stages:
 - stage: JMeterTest
   displayName: JMeter Test stage
   # dependsOn: BuildAndDeploy
-  # condition: eq('${{ parameters.JMeter }}', 'true')
+  condition: eq('${{ parameters.JMeter }}', 'true')
   # condition: and(succeeded(), eq('${{ parameters.JMeter }}', 'true'))
 
   jobs:
@@ -99,7 +121,7 @@ stages:
   displayName: ChatGPT stage
   # dependsOn: JMeterTest
   # condition: and(succeeded(), eq('${{ parameters.ChatGPT }}', 'true'))
-  # condition: eq('${{ parameters.ChatGPT }}', 'true')
+  condition: eq('${{ parameters.ChatGPT }}', 'true')
 
   jobs:
   - template: ChatGPT.yml@templates
