@@ -132,6 +132,7 @@ stages:
       apiUrl: $(ApiUrl)
       workingDir: $(workingDirectory)
       caption: "GetWebAPI message"
+      chatid: "549538016"
       # EmailUsernameRecipient: $(EmailUsernameRecipient)
       # EmailPassword: $(EmailPassword)
       # EmailUsername: $(EmailUsername)
