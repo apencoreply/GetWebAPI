@@ -113,5 +113,5 @@ stages:
       # EmailPassword: $(EmailPassword)
       # EmailUsername: $(EmailUsername)
       # EmailAPIKEY: $(EmailAPIKEY)
-  variables:
-  - group: MySecrets
+  # variables:
+  # - group: MySecrets
