@@ -131,6 +131,7 @@ stages:
       apiKey: $(ApiKey)
       apiUrl: $(ApiUrl)
       workingDir: $(workingDirectory)
+      caption: "GetWebAPI message"
       # EmailUsernameRecipient: $(EmailUsernameRecipient)
       # EmailPassword: $(EmailPassword)
       # EmailUsername: $(EmailUsername)
