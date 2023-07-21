@@ -108,6 +108,7 @@ stages:
       temperature: '0.7'
       apiKey: $(ApiKey)
       apiUrl: $(ApiUrl)
+      workingDir: $(workingDirectory)
       # EmailUsernameRecipient: $(EmailUsernameRecipient)
       # EmailPassword: $(EmailPassword)
       # EmailUsername: $(EmailUsername)
