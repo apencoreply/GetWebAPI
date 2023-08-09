@@ -128,8 +128,8 @@ stages:
     parameters:
       tokens: '2000'
       temperature: '0.7'
-      apiKey: $(ApiKey-GPT3-16)
-      apiUrl: $(ApiUrlGPT3-16)
+      apiKey: $(ApiKey-GPT4-32)
+      apiUrl: $(ApiUrlGPT4-32)
       workingDir: $(workingDirectory)
       caption: "GetWebAPI message"
       chatid: "549538016"
