@@ -104,68 +104,68 @@ stages:
               appName: $(functionAppName)
               package: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
 
-- stage: JMeterTest
-  displayName: JMeter Test stage
-  # dependsOn: BuildAndDeploy
-  condition: eq('${{ parameters.JMeter }}', 'true')
-  # condition: and(succeeded(), eq('${{ parameters.JMeter }}', 'true'))
+# - stage: JMeterTest
+#   displayName: JMeter Test stage
+#   # dependsOn: BuildAndDeploy
+#   condition: eq('${{ parameters.JMeter }}', 'true')
+#   # condition: and(succeeded(), eq('${{ parameters.JMeter }}', 'true'))
 
-  jobs:
-  - template: JMeter.yml@templates
-    parameters:
-      threads: '25'
-      rampup: '1'
-      loops: '20'
+#   jobs:
+#   - template: JMeter.yml@templates
+#     parameters:
+#       threads: '25'
+#       rampup: '1'
+#       loops: '20'
 
-- stage: ChatGPT
-  displayName: ChatGPT stage
-  # dependsOn: JMeterTest
-  # condition: and(succeeded(), eq('${{ parameters.ChatGPT }}', 'true'))
-  condition: eq('${{ parameters.ChatGPT }}', 'true')
+# - stage: ChatGPT
+#   displayName: ChatGPT stage
+#   # dependsOn: JMeterTest
+#   # condition: and(succeeded(), eq('${{ parameters.ChatGPT }}', 'true'))
+#   condition: eq('${{ parameters.ChatGPT }}', 'true')
 
-  jobs:
-  - template: ChatGPT.yml@templates
-    parameters:
-      tokens: '2000'
-      temperature: '0.7'
-      apiKey: $(ApiKey-GPT4-32)
-      apiUrl: $(ApiUrlGPT4-32)
-      workingDir: $(workingDirectory)
-      caption: "GetWebAPI message"
-      chatid: "549538016"
-      # EmailUsernameRecipient: $(EmailUsernameRecipient)
-      # EmailPassword: $(EmailPassword)
-      # EmailUsername: $(EmailUsername)
-      # EmailAPIKEY: $(EmailAPIKEY)
-  variables:
-  - group: OpenAI
-
-  
-# - stage: JMeterTest  
-#   displayName: JMeter Test stage  
-#   condition: eq('${ parameters.JMeter }}', 'true')  
-  
-#   jobs:  
-#   - template: JMeter.yml@templates  
-#     parameters:  
-#       threads: '10'  
-#       rampup: '1'    
-#       loops: '10'
-  
-  
-# - stage: ChatGPT  
-#   displayName: ChatGPT stage  
-#   condition: eq('${{ parameters.ChatGPT }}', 'true')  
-  
-#   jobs:  
-#   - template: ChatGPT.yml@templates  
-#     parameters:  
-#       tokens: '4000'  
-#       temperature: '0.7'  
+#   jobs:
+#   - template: ChatGPT.yml@templates
+#     parameters:
+#       tokens: '2000'
+#       temperature: '0.7'
 #       apiKey: $(ApiKey-GPT4-32)
 #       apiUrl: $(ApiUrlGPT4-32)
-#       workingDir: '$(workingDirectory)'
-#       caption: 'Checkout these suggestions!'  
-#       chatid: '549538016'
+#       workingDir: $(workingDirectory)
+#       caption: "GetWebAPI message"
+#       chatid: "549538016"
+#       # EmailUsernameRecipient: $(EmailUsernameRecipient)
+#       # EmailPassword: $(EmailPassword)
+#       # EmailUsername: $(EmailUsername)
+#       # EmailAPIKEY: $(EmailAPIKEY)
 #   variables:
-#     - group: 'OpenAI'
+#   - group: OpenAI
+
+  
+- stage: JMeterTest  
+  displayName: JMeter Test stage  
+  condition: eq('${{ parameters.JMeter }}', 'true')  
+  
+  jobs:  
+  - template: JMeter.yml@templates  
+    parameters:  
+      threads: '10'  
+      rampup: '1'    
+      loops: '10'
+  
+  
+- stage: ChatGPT  
+  displayName: ChatGPT stage  
+  condition: eq('${{ parameters.ChatGPT }}', 'true')  
+  
+  jobs:  
+  - template: ChatGPT.yml@templates  
+    parameters:  
+      tokens: '4000'  
+      temperature: '0.7'  
+      apiKey: $(ApiKey-GPT4-32)
+      apiUrl: $(ApiUrlGPT4-32)
+      workingDir: '$(workingDirectory)'
+      caption: 'Checkout these suggestions!'  
+      chatid: '549538016'
+  variables:
+    - group: 'OpenAI'
