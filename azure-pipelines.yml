@@ -139,13 +139,7 @@ stages:
 #       # EmailAPIKEY: $(EmailAPIKEY)
 #   variables:
 #   - group: OpenAI
-
-  
-- stage: JMeterTest  
-  displayName: JMeter Test stage  
-  condition: eq('${{ parameters.JMeter }}', 'true')  
-  
-  jobs:  
+ 
   - template: JMeter.yml@templates  
     parameters:  
       threads: '10'  
