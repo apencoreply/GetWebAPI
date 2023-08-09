@@ -168,4 +168,4 @@ stages:
       caption: 'Checkout these suggestions!'  
       chatid: '549538016'
   variables:
-    - group: OpenAI
+    - group: 'OpenAI'
