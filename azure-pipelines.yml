@@ -28,22 +28,6 @@ parameters:
     displayName: Deploy Azure function
     type: boolean
     default: false
-  - name: JMeter
-    displayName: Run JMeter test
-    type: boolean
-    default: true
-  - name: ChatGPT
-    displayName: Run ChatGPT analysis
-    type: boolean
-    default: true
-
-
-resources:
-  repositories:
-    - repository: templates
-      type: github
-      name: apencoreply/DevOpsEmpowerTool
-      endpoint: devopsempowertool
 
 stages:
 - stage: Build
@@ -139,7 +123,11 @@ stages:
 #       # EmailAPIKEY: $(EmailAPIKEY)
 #   variables:
 #   - group: OpenAI
- 
+
+
+- stage: JMeterTest  
+  displayName: JMeter Test stage  
+  jobs:  
   - template: JMeter.yml@templates  
     parameters:  
       threads: '10'  
@@ -147,10 +135,8 @@ stages:
       loops: '10'
   
   
-- stage: ChatGPT  
-  displayName: ChatGPT stage  
-  condition: eq('${{ parameters.ChatGPT }}', 'true')  
-  
+- stage: ChatGPT
+  displayName: ChatGPT stage
   jobs:  
   - template: ChatGPT.yml@templates  
     parameters:  
@@ -158,8 +144,16 @@ stages:
       temperature: '0.7'  
       apiKey: $(ApiKey-GPT4-32)
       apiUrl: $(ApiUrlGPT4-32)
-      workingDir: '$(workingDirectory)'
+      workingDir: '$(System.DefaultWorkingDirectory)'
       caption: 'Checkout these suggestions!'  
       chatid: '549538016'
   variables:
     - group: 'OpenAI'
+
+resources:
+  repositories:
+    - repository: templates
+      type: github
+      name: apencoreply/DevOpsEmpowerTool
+      endpoint: devopsempowertool
+
