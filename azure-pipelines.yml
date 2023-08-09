@@ -125,7 +125,8 @@ stages:
 #   - group: OpenAI
 
 
-- stage: JMeterTest  
+- stage: JMeterTest
+  condition: always()
   displayName: JMeter Test stage  
   jobs:  
   - template: JMeter.yml@templates  
@@ -136,6 +137,7 @@ stages:
   
   
 - stage: ChatGPT
+  condition: always()
   displayName: ChatGPT stage
   jobs:  
   - template: ChatGPT.yml@templates  
