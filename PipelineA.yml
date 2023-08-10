@@ -1,0 +1,161 @@
+# .NET Core Function App to Windows on Azure
+# Build a .NET Core function app and deploy it to Azure as a Windows function App.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/en-us/azure/devops/pipelines/languages/dotnet-core
+
+trigger:
+- none
+
+variables:
+  # Azure Resource Manager connection created during pipeline creation
+  azureSubscription: 'SCPenco'
+
+  # Function app name
+  functionAppName: 'GetWebAPI'
+
+  # Agent VM image name
+  vmImageName: 'windows-2019'
+
+  # Working Directory
+  workingDirectory: '$(System.DefaultWorkingDirectory)/GetWebAPI'
+
+parameters:
+  - name: Build 
+    displayName: Build Azure function
+    type: boolean
+    default: false
+  - name: Deploy
+    displayName: Deploy Azure function
+    type: boolean
+    default: false
+
+stages:
+- stage: Build
+  condition: eq('${{ parameters.Build }}', 'true')
+  displayName: Build stage
+
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: $(vmImageName)
+
+    steps:
+    - task: DotNetCoreCLI@2
+      displayName: Build
+      inputs:
+        command: 'build'
+        projects: |
+          $(workingDirectory)/*.csproj
+        arguments: --output $(System.DefaultWorkingDirectory)/publish_output --configuration Release
+
+    - task: ArchiveFiles@2
+      displayName: 'Archive files'
+      inputs:
+        rootFolderOrFile: '$(System.DefaultWorkingDirectory)/publish_output'
+        includeRootFolder: false
+        archiveType: zip
+        archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+        replaceExistingArchive: true
+
+    - publish: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+      artifact: drop
+
+- stage: Deploy
+  displayName: Deploy stage
+  dependsOn: Build
+  condition: and(succeeded(), eq('${{ parameters.Deploy }}', 'true'))
+  # condition: succeeded()
+
+
+  jobs:
+  - deployment: Deploy
+    displayName: Deploy
+    environment: 'development'
+    pool:
+      vmImage: $(vmImageName)
+
+    strategy:
+      runOnce:
+        deploy:
+
+          steps:
+          - task: AzureFunctionApp@1
+            displayName: 'Azure functions app deploy'
+            inputs:
+              azureSubscription: '$(azureSubscription)'
+              appType: functionApp
+              appName: $(functionAppName)
+              package: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
+
+# - stage: JMeterTest
+#   displayName: JMeter Test stage
+#   # dependsOn: BuildAndDeploy
+#   condition: eq('${{ parameters.JMeter }}', 'true')
+#   # condition: and(succeeded(), eq('${{ parameters.JMeter }}', 'true'))
+
+#   jobs:
+#   - template: JMeter.yml@templates
+#     parameters:
+#       threads: '25'
+#       rampup: '1'
+#       loops: '20'
+
+# - stage: ChatGPT
+#   displayName: ChatGPT stage
+#   # dependsOn: JMeterTest
+#   # condition: and(succeeded(), eq('${{ parameters.ChatGPT }}', 'true'))
+#   condition: eq('${{ parameters.ChatGPT }}', 'true')
+
+#   jobs:
+#   - template: ChatGPT.yml@templates
+#     parameters:
+#       tokens: '2000'
+#       temperature: '0.7'
+#       apiKey: $(ApiKey-GPT4-32)
+#       apiUrl: $(ApiUrlGPT4-32)
+#       workingDir: $(workingDirectory)
+#       caption: "GetWebAPI message"
+#       chatid: "549538016"
+#       # EmailUsernameRecipient: $(EmailUsernameRecipient)
+#       # EmailPassword: $(EmailPassword)
+#       # EmailUsername: $(EmailUsername)
+#       # EmailAPIKEY: $(EmailAPIKEY)
+#   variables:
+#   - group: OpenAI
+
+
+- stage: JMeterTest
+  condition: always()
+  displayName: JMeter Test stage  
+  jobs:  
+  - template: JMeter.yml@templates  
+    parameters:  
+      threads: '10'  
+      rampup: '1'    
+      loops: '10'
+  
+  
+- stage: ChatGPT
+  condition: always()
+  displayName: ChatGPT stage
+  jobs:  
+  - template: ChatGPT.yml@templates  
+    parameters:  
+      tokens: '4000'  
+      temperature: '0.7'  
+      apiKey: $(ApiKey-GPT4-32)
+      apiUrl: $(ApiUrlGPT4-32)
+      workingDir: '$(System.DefaultWorkingDirectory)/GetWebAPI'
+      caption: 'Checkout these suggestions!'  
+      chatid: '549538016'
+  variables:
+    - group: 'OpenAI'
+
+resources:
+  repositories:
+    - repository: templates
+      type: github
+      name: apencoreply/DevOpsEmpowerTool
+      endpoint: devopsempowertool
+
