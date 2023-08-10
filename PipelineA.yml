@@ -88,74 +88,20 @@ stages:
               appName: $(functionAppName)
               package: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
 
-# - stage: JMeterTest
-#   displayName: JMeter Test stage
-#   # dependsOn: BuildAndDeploy
-#   condition: eq('${{ parameters.JMeter }}', 'true')
-#   # condition: and(succeeded(), eq('${{ parameters.JMeter }}', 'true'))
-
-#   jobs:
-#   - template: JMeter.yml@templates
-#     parameters:
-#       threads: '25'
-#       rampup: '1'
-#       loops: '20'
-
-# - stage: ChatGPT
-#   displayName: ChatGPT stage
-#   # dependsOn: JMeterTest
-#   # condition: and(succeeded(), eq('${{ parameters.ChatGPT }}', 'true'))
-#   condition: eq('${{ parameters.ChatGPT }}', 'true')
-
-#   jobs:
-#   - template: ChatGPT.yml@templates
-#     parameters:
-#       tokens: '2000'
-#       temperature: '0.7'
-#       apiKey: $(ApiKey-GPT4-32)
-#       apiUrl: $(ApiUrlGPT4-32)
-#       workingDir: $(workingDirectory)
-#       caption: "GetWebAPI message"
-#       chatid: "549538016"
-#       # EmailUsernameRecipient: $(EmailUsernameRecipient)
-#       # EmailPassword: $(EmailPassword)
-#       # EmailUsername: $(EmailUsername)
-#       # EmailAPIKEY: $(EmailAPIKEY)
-#   variables:
-#   - group: OpenAI
-
-
-- stage: JMeterTest
-  condition: always()
-  displayName: JMeter Test stage  
+- stage: TriggerPipelineB  
   jobs:  
-  - template: JMeter.yml@templates  
-    parameters:  
-      threads: '10'  
-      rampup: '1'    
-      loops: '10'
-  
-  
-- stage: ChatGPT
-  condition: always()
-  displayName: ChatGPT stage
-  jobs:  
-  - template: ChatGPT.yml@templates  
-    parameters:  
-      tokens: '4000'  
-      temperature: '0.7'  
-      apiKey: $(ApiKey-GPT4-32)
-      apiUrl: $(ApiUrlGPT4-32)
-      workingDir: '$(System.DefaultWorkingDirectory)/GetWebAPI'
-      caption: 'Checkout these suggestions!'  
-      chatid: '549538016'
-  variables:
-    - group: 'OpenAI'
+  - job: TriggerPipelineB  
+    steps:  
+    - script: |  
+        echo "Triggering the second pipeline"  
+          
+        # Trigger the second pipeline  
+        response=$(curl -X POST -H "Content-Type: application/json" -H "Authorization: Bearer gbxek5guc2m2vs7vygpjtneuuyh7q5nti7dyifubz6erxmcjchka" -d "{\"definition\": {\"id\": 31}}" "https://dev.azure.com/apenco/DevTest/_apis/build/builds?api-version=6.0")  
+          
+        # Extract the ID of the pipeline run  
+        runId=$(echo $response | jq '.id')  
+          
+        echo "Triggered pipeline run ID: $runId"  
+      displayName: 'Trigger second pipeline
 
-resources:
-  repositories:
-    - repository: templates
-      type: github
-      name: apencoreply/DevOpsEmpowerTool
-      endpoint: devopsempowertool
 
