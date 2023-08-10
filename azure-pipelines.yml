@@ -125,7 +125,7 @@ stages:
 #   - group: OpenAI
 
 
-- stage: JMeterTest
+- stage: JMeterTest  
   condition: always()
   displayName: JMeter Test stage  
   jobs:  
@@ -145,13 +145,9 @@ stages:
       tokens: '4000'  
       temperature: '0.7'  
       model: 'GPT4'
-      # apiKey: $(ApiKey-GPT4-32)
-      # apiUrl: $(ApiUrlGPT4-32)
-      workingDir: '$(System.DefaultWorkingDirectory)/GetWebAPI'
+      workingDir: $(System.DefaultWorkingDirectory)
       caption: 'Checkout these suggestions!'  
       chatid: '549538016'
-  variables:
-    - group: 'OpenAI'
 
 resources:
   repositories:
@@ -159,4 +155,3 @@ resources:
       type: github
       name: apencoreply/DevOpsEmpowerTool
       endpoint: devopsempowertool
-
