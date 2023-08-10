@@ -6,19 +6,6 @@
 trigger:
 - none
 
-variables:
-  # Azure Resource Manager connection created during pipeline creation
-  azureSubscription: 'SCPenco'
-
-  # Function app name
-  functionAppName: 'GetWebAPI'
-
-  # Agent VM image name
-  vmImageName: 'windows-2019'
-
-  # Working Directory
-  workingDirectory: '$(System.DefaultWorkingDirectory)/GetWebAPI'
-
 parameters:
   - name: Build 
     displayName: Build Azure function
@@ -38,7 +25,7 @@ stages:
   - job: Build
     displayName: Build
     pool:
-      vmImage: $(vmImageName)
+      vmImage: 'windows-2019'
 
     steps:
     - task: DotNetCoreCLI@2
@@ -73,7 +60,7 @@ stages:
     displayName: Deploy
     environment: 'development'
     pool:
-      vmImage: $(vmImageName)
+      vmImage: 'windows-2019'
 
     strategy:
       runOnce:
@@ -85,7 +72,7 @@ stages:
             inputs:
               azureSubscription: '$(azureSubscription)'
               appType: functionApp
-              appName: $(functionAppName)
+              appName: 'GetWebAPI'
               package: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
 
 # - stage: JMeterTest
@@ -145,7 +132,7 @@ stages:
       tokens: '4000'  
       temperature: '0.7'  
       model: 'GPT4'
-      workingDir: $(System.DefaultWorkingDirectory)
+      workingDir: $(workingDirectory)
       caption: 'Checkout these suggestions!'  
       chatid: '549538016'
 
@@ -155,3 +142,10 @@ resources:
       type: github
       name: apencoreply/DevOpsEmpowerTool
       endpoint: devopsempowertool
+
+variables:
+  # Azure Resource Manager connection created during pipeline creation
+  azureSubscription: 'SCPenco'
+
+  # Working Directory
+  workingDirectory: $(System.DefaultWorkingDirectory)/GetWebAPI
