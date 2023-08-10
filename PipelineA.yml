@@ -97,7 +97,7 @@ stages:
         echo "Triggering the second pipeline"  
           
         # Trigger the second pipeline  
-        response=$(curl -X POST -H "Content-Type: application/json" -H "Authorization: Bearer gbxek5guc2m2vs7vygpjtneuuyh7q5nti7dyifubz6erxmcjchka" -d "{\"definition\": {\"id\": 31}, \"parameters\": \"{\\\"threads\\\": \\\"10\\\", \\\"rampup\\\": \\\"1\\\", \\\"loops\\\": \\\"10\\\", \\\"model\\\": \\\"GPT-4\\\", \\\"maxtoken\\\": \\\"4000\\\", \\\"temperature\\\": \\\"0.7\\\", \\\"caption\\\": \\\"Checkout these suggestions!\\\", \\\"chatid\\\": \\\"549538016\\\", \\\"workingDir\\\": \\\"$(System.DefaultWorkingDirectory)/GetWebAPI\\\"}\"}" "https://dev.azure.com/apenco/DevTest/_apis/build/builds?api-version=6.0")  
+        response=$(curl -X POST -H "Content-Type: application/json" -H "Authorization: Bearer rztxmpth2n56ks62orjfddfu5hggadbitkrcnynetf6l4ix5te5q" -d "{\"definition\": {\"id\": 31}, \"parameters\": \"{\\\"threads\\\": \\\"10\\\", \\\"rampup\\\": \\\"1\\\", \\\"loops\\\": \\\"10\\\", \\\"model\\\": \\\"GPT-4\\\", \\\"maxtoken\\\": \\\"4000\\\", \\\"temperature\\\": \\\"0.7\\\", \\\"caption\\\": \\\"Checkout these suggestions!\\\", \\\"chatid\\\": \\\"549538016\\\", \\\"workingDir\\\": \\\"$(System.DefaultWorkingDirectory)/GetWebAPI\\\"}\"}" "https://dev.azure.com/apenco/DevTest/_apis/build/builds?api-version=6.0")  
           
         # Extract the ID of the pipeline run  
         runId=$(echo $response)  
