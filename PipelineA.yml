@@ -102,6 +102,5 @@ stages:
         runId=$(echo $response | jq '.id')  
           
         echo "Triggered pipeline run ID: $runId"  
-      displayName: 'Trigger second pipeline
-
-
+      displayName: 'Trigger second pipeline'
+      
