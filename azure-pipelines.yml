@@ -110,6 +110,7 @@ resources:
 variables:
   # Working Directory
   workingDirectory: $(System.DefaultWorkingDirectory)/GetWebAPI
+  azureSubscription: 'SCPenco'
 
 
 
