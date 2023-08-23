@@ -81,9 +81,9 @@ stages:
   jobs:  
   - template: JMeter.yml@templates  
     parameters:  
-      threads: '10'  
+      threads: '100'  
       rampup: '1'    
-      loops: '10'
+      loops: '100'
   
   
 - stage: ChatGPT
@@ -94,10 +94,11 @@ stages:
     parameters:  
       tokens: '4000'  
       temperature: '0.7'  
-      model: 'GPT4'
+      model: 'GPT3'
       workingDir: $(workingDirectory)
-      caption: 'Checkout these suggestions!'  
+      caption: 'GetAPI'  
       chatid: '549538016'
+      azSubscription: 'SCPenco'
 
 resources:
   repositories:
@@ -107,15 +108,8 @@ resources:
       endpoint: devopsempowertool
 
 variables:
-  # Azure Resource Manager connection created during pipeline creation
-  azureSubscription: 'SCPenco'
-
   # Working Directory
   workingDirectory: $(System.DefaultWorkingDirectory)/GetWebAPI
-
-
-
-
 
 
 
