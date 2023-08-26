@@ -81,9 +81,9 @@ stages:
   jobs:  
   - template: JMeter.yml@templates  
     parameters:  
-      threads: '100'  
+      threads: '10'  
       rampup: '1'    
-      loops: '100'
+      loops: '10'
   
   
 - stage: ChatGPT
@@ -96,7 +96,7 @@ stages:
       temperature: '0.7'  
       model: 'GPT3'
       workingDir: $(workingDirectory)
-      caption: 'GetAPI'  
+      caption: 'GetAPI  gpt3 10x10 4000 NP'  
       chatid: '549538016'
       azSubscription: 'SCPenco'
 
