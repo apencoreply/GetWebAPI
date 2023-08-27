@@ -94,9 +94,9 @@ stages:
     parameters:  
       tokens: '4000'  
       temperature: '0.7'  
-      model: 'GPT3'
+      model: 'GPT4'
       workingDir: $(workingDirectory)
-      caption: '10th10u4ktGPt3-GetAPI-np'  
+      caption: '10th10u4ktGPt4-GetAPI-np'  
       chatid: '549538016'
       azSubscription: 'SCPenco'
 
