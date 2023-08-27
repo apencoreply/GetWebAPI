@@ -81,7 +81,7 @@ stages:
   jobs:  
   - template: JMeter.yml@templates  
     parameters:  
-      threads: '10'  
+      threads: '100'  
       rampup: '1'    
       loops: '10'
   
@@ -96,7 +96,7 @@ stages:
       temperature: '0.7'  
       model: 'GPT4'
       workingDir: $(workingDirectory)
-      caption: '10th10u14ktGPt4-GetAPI-np'  
+      caption: '100th10u14ktGPt4-GetAPI-np'  
       chatid: '549538016'
       azSubscription: 'SCPenco'
 
