@@ -96,7 +96,7 @@ stages:
       temperature: '0.7'  
       model: 'GPT4'
       workingDir: $(workingDirectory)
-      caption: '10th10u14ktGPt4-GetAPI-sup'  
+      caption: '10th10u14ktGPt4-GetAPI-sp'  
       chatid: '549538016'
       azSubscription: 'SCPenco'
 
