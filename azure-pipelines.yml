@@ -92,11 +92,11 @@ stages:
   jobs:  
   - template: ChatGPT.yml@templates  
     parameters:  
-      tokens: '14000'  
+      tokens: '4000'  
       temperature: '0.7'  
-      model: 'GPT4'
+      model: 'GPT3'
       workingDir: $(workingDirectory)
-      caption: '10th10u14ktGPt4-GetAPI-up'  
+      caption: '10th10u4ktGPt3-GetAPI-np'  
       chatid: '549538016'
       azSubscription: 'SCPenco'
 
