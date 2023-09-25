@@ -18,6 +18,7 @@ namespace GetWebAPI
 {
     public static class GetWebAPI
     {
+        private static readonly ConcurrentDictionary<string, RequestDocument> cache = new ConcurrentDictionary<string, RequestDocument>();
         private static readonly string cosmosDbEndpoint = Environment.GetEnvironmentVariable("DBENDPOINT", EnvironmentVariableTarget.Process);
         private static readonly string cosmosDbKey = Environment.GetEnvironmentVariable("DBKEY", EnvironmentVariableTarget.Process);
         private static readonly string databaseId = Environment.GetEnvironmentVariable("DBID", EnvironmentVariableTarget.Process);
@@ -27,22 +28,33 @@ namespace GetWebAPI
 
         [FunctionName("GetWebAPI")]
         public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequest req,
-            ILogger log)
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequest req,
+        ILogger log)
         {
             try
             {
                 string id = req.Query["id"];
 
-                // Validate that the ID is provided
+                // Validate that the ID is provided  
                 if (string.IsNullOrEmpty(id))
                 {
                     return new BadRequestObjectResult("The 'id' query parameter is required.");
                 }
 
-                // Retrieve the item from Cosmos DB
+                // Check if item in cache  
+                if (cache.TryGetValue(id, out var cachedItem))
+                {
+                    log.LogInformation($"Retrieved cached item with ID '{id}'.");
+                    return new OkObjectResult(cachedItem);
+                }
+
+                // Retrieve the item from Cosmos DB  
                 var response = await cosmosContainer.ReadItemAsync<RequestDocument>(id, new PartitionKey(id));
 
+                // Add retrieved item to cache  
+                cache.TryAdd(id, response.Resource);
+
+                log.LogInformation($"Retrieved item with ID '{id}' from Cosmos DB.");
                 return new OkObjectResult(response.Resource);
             }
             catch (CosmosException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
